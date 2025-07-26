@@ -1,0 +1,45 @@
+﻿<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>VideoShare</h5>
+                <p>A TikTok-like video sharing platform built with Django and Bootstrap.</p>
+            </div>
+            <div class="col-md-2">
+                <h5>Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'home' %}" class="text-decoration-none">Home</a></li>
+                    <li><a href="{% url 'content:video_list' %}" class="text-decoration-none">Videos</a></li>
+                    <li><a href="{% url 'content:short_videos' %}" class="text-decoration-none">Shorts</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                <h5>Account</h5>
+                <ul class="list-unstyled">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'dashboard' %}" class="text-decoration-none">Dashboard</a></li>
+                        <li><a href="{% url 'logout' %}" class="text-decoration-none">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}" class="text-decoration-none">Login</a></li>
+                        <li><a href="{% url 'register' %}" class="text-decoration-none">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Connect With Us</h5>
+                <div class="social-links">
+                    <a href="#" class="text-decoration-none me-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-decoration-none me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-decoration-none me-2"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-decoration-none me-2"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="mb-0">&copy; {% now "Y" %} VideoShare. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>

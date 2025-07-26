@@ -1,0 +1,128 @@
+﻿{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-md-6 d-flex align-items-center">
+            <div>
+                <h1 class="display-4 fw-bold mb-4">Share Your Videos With The World</h1>
+                <p class="lead mb-4">Upload, share, and discover amazing short and long form videos on our platform.</p>
+                <div class="d-flex">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'content:video_upload' %}" class="btn btn-primary btn-lg me-3">Upload Video</a>
+                    {% else %}
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-3">Get Started</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+               <iframe width="500" height="369" src="https://www.youtube.com/embed/nGIg40xs9e4" title="Learn Django in 20 Minutes!!" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Latest Videos -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Latest Videos</h2>
+            <div class="row">
+                {% for video in latest_videos %}
+                    <div class="col-md-3 mb-4">
+                        <div class="card video-card h-100" data-video-url="{% url 'content:video_detail' video.slug %}">
+                            <img src="{{ video.thumbnail.url }}" class="card-img-top video-card-img" alt="{{ video.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ video.title|truncatechars:30 }}</h5>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">{{ video.uploader.username }}</small>
+                                    <small class="text-muted">{{ video.views }} views</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-3">
+                <a href="{% url 'content:video_list' %}" class="btn btn-outline-primary">View All Videos</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popular Videos -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Popular Videos</h2>
+            <div class="row">
+                {% for video in popular_videos %}
+                    <div class="col-md-3 mb-4">
+                        <div class="card video-card h-100" data-video-url="{% url 'content:video_detail' video.slug %}">
+                            <img src="{{ video.thumbnail.url }}" class="card-img-top video-card-img" alt="{{ video.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ video.title|truncatechars:30 }}</h5>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">{{ video.uploader.username }}</small>
+                                    <div>
+                                        <small class="text-warning me-1">
+                                            <i class="fas fa-star"></i> {{ video.avg_rating|floatformat:1 }}
+                                        </small>
+                                        <small class="text-muted">{{ video.views }} views</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Short Videos -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Short Videos</h2>
+            <div class="row">
+                {% for video in short_videos %}
+                    <div class="col-md-3 mb-4">
+                        <div class="card video-card h-100" data-video-url="{% url 'content:video_detail' video.slug %}">
+                            <img src="{{ video.thumbnail.url }}" class="card-img-top video-card-img" alt="{{ video.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ video.title|truncatechars:30 }}</h5>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">{{ video.uploader.username }}</small>
+                                    <small class="text-muted">{{ video.views }} views</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-3">
+                <a href="{% url 'content:short_videos' %}" class="btn btn-outline-primary">View All Shorts</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Categories -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Browse Categories</h2>
+            <div class="row">
+                {% for category in categories %}
+                    <div class="col-md-2 mb-4">
+                        <a href="{% url 'category_videos' category.slug %}" class="text-decoration-none">
+                            <div class="card h-100 hover-grow text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-film fa-3x mb-3 text-primary"></i>
+                                    <h5 class="card-title">{{ category.name }}</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

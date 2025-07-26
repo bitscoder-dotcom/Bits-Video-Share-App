@@ -1,0 +1,45 @@
+﻿{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <img src="{{ user.profile_picture.url|default:'/static/images/default_profile.png' }}" 
+                         class="rounded-circle mb-3" width="150" height="150">
+                    <h4>{{ user.username }}</h4>
+                    <p class="text-muted">{{ user.get_user_type_display }}</p>
+                    
+                    {% if user.user_type == 2 and user.creator_profile %}
+                        <div class="mt-3">
+                            <h5>{{ user.creator_profile.channel_name }}</h5>
+                            <p>{{ user.creator_profile.channel_description }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Dashboard</h4>
+                </div>
+                <div class="card-body">
+                    {% if user.user_type == 1 %}
+                        <div class="alert alert-info">
+                            <p>You are currently a consumer. Would you like to become a creator?</p>
+                            <a href="{% url 'become_creator' %}" class="btn btn-primary">Apply to Become a Creator</a>
+                        </div>
+                    {% elif user.user_type == 2 %}
+                        <div class="alert alert-success">
+                            <p>You are a verified creator! You can now upload videos.</p>
+                            <a href="{% url 'content:video_upload' %}" class="btn btn-success">Upload Video</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
