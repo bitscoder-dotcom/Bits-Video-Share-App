@@ -11,3 +11,4 @@ Pillow==9.5.0
 django-allauth==0.54.0
 django-filter==23.2
 django-widget-tweaks==1.5.0
+opencv-python
