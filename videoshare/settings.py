@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-for-dev-only')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = False
 ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,15 +74,29 @@ TEMPLATES = [
 WSGI_APPLICATION = 'videoshare.wsgi.application'
 
 # Database
+#DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'videosharing',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'abcdefghi',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
+    # }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'videosharing',
-        'USER': 'postgres',
-        'PASSWORD': 'abcdefghi',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'munim',
+        'PASSWORD': 'swordFish@123',
+        'HOST': 'videosharepg.postgres.database.azure.com',
         'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        }
     }
+
+
 }
 
 # Authentication
