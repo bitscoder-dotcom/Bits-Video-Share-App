@@ -2,6 +2,7 @@
 from pathlib import Path
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
+ALLOWED_HOSTS = ['videoshareapp.azurewebsites.net']
 
 # Load environment variables
 load_dotenv()
