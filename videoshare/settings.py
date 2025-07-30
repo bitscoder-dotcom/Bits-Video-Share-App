@@ -2,7 +2,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
-ALLOWED_HOSTS = ['videoshareapp.azurewebsites.net']
 
 # Load environment variables
 load_dotenv()
@@ -12,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-for-dev-only')
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
@@ -75,30 +74,32 @@ TEMPLATES = [
 WSGI_APPLICATION = 'videoshare.wsgi.application'
 
 # Database
-#DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'videosharing',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'abcdefghi',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432',
-    # }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'munim',
-        'PASSWORD': 'swordFish@123',
-        'HOST': 'videosharepg.postgres.database.azure.com',
+        'NAME': 'videosharing',
+        'USER': 'postgres',
+        'PASSWORD': '=-098',
+        'HOST': 'localhost',
         'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-        }
     }
-
-
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'munim',
+#         'PASSWORD': 'swordFish@123',
+#         'HOST': 'videosharepg.postgres.database.azure.com',
+#         'PORT': '5432',
+#         'OPTIONS': {
+#             'sslmode': 'require',
+#         }
+#     }
+
+
+
 
 # Authentication
 AUTH_USER_MODEL = 'accounts.CustomUser'
