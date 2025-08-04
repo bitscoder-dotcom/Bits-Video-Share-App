@@ -6,42 +6,29 @@ name: Build and deploy Python app to Azure Web App - Bits-VideoShare
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Python version
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
       - name: Create and start virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
-
       - name: Install dependencies
         run: pip install -r requirements.txt
-
       - name: Run collectstatic
         run: python manage.py collectstatic --noinput
-
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-app
-          path: |
-            .
-            !venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,11 +38,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: python-app
-
+      - uses: actions/checkout@v4
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -69,3 +52,5 @@ jobs:
         with:
           app-name: "Bits-VideoShare"
           slot-name: "Production"
+          package: .
+          scm-do-build-during-deployment: false
