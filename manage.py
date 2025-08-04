@@ -3,7 +3,7 @@ import os
 import sys
 
 def main():
-    
+    """Run administrativ tasks."""
     settings_module = 'videoshare.deployment' if 'WEBSITE_HOSTNAME' in os.environ else 'videoshare.settings'
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings_module)
     try:
