@@ -3,8 +3,8 @@ from .settings import *
 from .settings import BASE_DIR
 
 SECRET_KEY = os.getenv('SECRET_KEY')
-ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']]
-CSRF_TRUSTED_ORIGINS = ['https://'+os.environ['WEBSITE_HOSTNAME']]
+ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME'], '169.254.131.4', '*']
+CSRF_TRUSTED_ORIGINS = ['https://'+os.environ['WEBSITE_HOSTNAME'], 'https://169.254.131.4']
 DEBUG = True ## for debugging, st to false when going to prod
 
 MIDDLEWARE = [
