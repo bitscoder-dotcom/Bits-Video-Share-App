@@ -48,8 +48,10 @@ jobs:
 
       - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
         with:
           app-name: "Bits-VideoShare"
           slot-name: "Production"
           package: .
+          enable-oryx-build: false
           scm-do-build-during-deployment: false
