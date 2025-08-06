@@ -53,5 +53,3 @@ jobs:
           app-name: "Bits-VideoShare"
           slot-name: "Production"
           package: .
-          enable-oryx-build: false
-          scm-do-build-during-deployment: false
