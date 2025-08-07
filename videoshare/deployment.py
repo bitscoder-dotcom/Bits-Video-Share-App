@@ -7,6 +7,48 @@ ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME'], '169.254.131.4', '*']
 CSRF_TRUSTED_ORIGINS = ['https://'+os.environ['WEBSITE_HOSTNAME'], 'https://169.254.131.4']
 DEBUG = True ## for debugging, st to false when going to prod
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
+INSTALLED_APPS += [
+    'storages',
+]
+
+# ─── AZURE BLOB STORAGE FOR MEDIA ────────────────────────────────────────
+
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+
+AZURE_ACCOUNT_NAME   = os.environ['AZURE_STORAGE_ACCOUNT_NAME']
+AZURE_ACCOUNT_KEY    = os.environ['AZURE_STORAGE_ACCOUNT_KEY']
+AZURE_CONTAINER      = os.environ['AZURE_STORAGE_CONTAINER_NAME']
+
+AZURE_CUSTOM_DOMAIN  = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
+MEDIA_URL            = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/"
+
+
+# ─── DATABASE VIA AZURE POSTGRES ────────────────────────────────────────
+
+connection_string = os.environ['AZURE_POSTGRESQL_CONNECTIONSTRING']
+paramters = {
+    kv.split('=',1)[0]: kv.split('=',1)[1]
+    for kv in connection_string.split()
+}
+
+DATABASES = {
+
+      'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': paramters['dbname'],
+            'HOST': paramters['host'],
+            'USER': paramters['user'],
+            'PASSWORD': paramters['password'],
+      }
+}
+
+
+# ─── MIDDLEWARE & LOGGING ───────────────────────────────────────────────
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -30,25 +72,4 @@ LOGGING = {
         'handlers': ['console'],
         'level': 'ERROR',
     },
-}
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-
-connection_string = os.environ['AZURE_POSTGRESQL_CONNECTIONSTRING']
-paramters = {
-    kv.split('=',1)[0]: kv.split('=',1)[1]
-    for kv in connection_string.split()
-}
-
-DATABASES = {
-
-      'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': paramters['dbname'],
-            'HOST': paramters['host'],
-            'USER': paramters['user'],
-            'PASSWORD': paramters['password'],
-      }
 }
