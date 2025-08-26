@@ -29,7 +29,7 @@ AZURE_CONTAINER    = os.getenv("AZURE_STORAGE_CONTAINER_NAME", "media")
 AZURE_OVERWRITE_FILES = False
 
 AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
-# MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/" if AZURE_CUSTOM_DOMAIN else "/media/"
+MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/videocontainer/"
 AZURE_URL_EXPIRATION_SECS = 3600
 
 # --- Database (Azure Postgres) ---

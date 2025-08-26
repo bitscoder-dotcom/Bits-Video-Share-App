@@ -3,15 +3,18 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
-    USER_TYPE_CHOICES = (
-        (1, 'consumer'),
-        (2, 'creator'),
-    )
-    
+    USER_TYPE_CHOICES = ((1, 'consumer'), (2, 'creator'))
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=1)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     bio = models.TextField(max_length=500, blank=True)
-    
+
+    @property
+    def avatar_url(self):
+        try:
+            return self.profile_picture.url if self.profile_picture else static('images/default_profile.png')
+        except ValueError: 
+            return static('images/default_profile.png')
+
     def __str__(self):
         return self.username
 
