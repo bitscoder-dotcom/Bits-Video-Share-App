@@ -1,5 +1,5 @@
 ﻿{% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="container mt-4">
     <div class="row mb-4">
@@ -68,7 +68,11 @@
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
                     <a href="{% url 'content:video_detail' video.slug %}">
-                        <img src="{{ video.thumbnail.url }}" class="card-img-top" alt="{{ video.title }}">
+                        {% if video.thumbnail %}
+                            <img src="{{ video.thumbnail.url }}" class="card-img-top" alt="{{ video.title }}">
+                        {% else %}
+                            <img src="{% static 'images/video_placeholder.jpg' %}" class="card-img-top" alt="{{ video.title }}">
+                        {% endif %}
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">
