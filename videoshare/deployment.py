@@ -13,15 +13,22 @@ USE_X_FORWARDED_HOST = True
 
 DEBUG = False  # flip to True only for local debugging
 
-# --- Static (served by WhiteNoise) ---`~`
+# --- Static (served by WhiteNoise) ---
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# Use the Django 5 STORAGES API (single source of truth)
+STORAGES = {
+    "default": {  # MEDIA → Azure Blob Storage
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+    },
+    "staticfiles": {  # STATIC → WhiteNoise
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # --- Media to Azure Blob via django-storages ---
 INSTALLED_APPS += ["storages"]
-
-DEFAULT_FILE_STORAGE = "storages.backends.azure_storage.AzureStorage"
 
 AZURE_ACCOUNT_NAME = os.getenv("AZURE_STORAGE_ACCOUNT_NAME")       # e.g. bitsvideostorage
 AZURE_ACCOUNT_KEY  = os.getenv("AZURE_STORAGE_ACCOUNT_KEY")
@@ -29,7 +36,7 @@ AZURE_CONTAINER    = os.getenv("AZURE_STORAGE_CONTAINER_NAME", "media")
 AZURE_OVERWRITE_FILES = False
 
 AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
-MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/videocontainer/"
+MEDIA_URL = f"https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/"
 AZURE_URL_EXPIRATION_SECS = 3600
 
 # --- Database (Azure Postgres) ---
