@@ -30,6 +30,9 @@ STORAGES = {
 # --- Media to Azure Blob via django-storages ---
 INSTALLED_APPS += ["storages"]
 
+WHITENOISE_MANIFEST_STRICT = False
+
+
 AZURE_ACCOUNT_NAME = os.getenv("AZURE_STORAGE_ACCOUNT_NAME")       # e.g. bitsvideostorage
 AZURE_ACCOUNT_KEY  = os.getenv("AZURE_STORAGE_ACCOUNT_KEY")
 AZURE_CONTAINER    = os.getenv("AZURE_STORAGE_CONTAINER_NAME", "media")
