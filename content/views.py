@@ -11,7 +11,10 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from .models import Video, Comment, Rating, VideoCategory, Like  # Add Like to imports
+from .models import Video, Comment, Rating, VideoCategory, Like
+from .thumbnailing import generate_thumbnail_for
+
+
 def home(request):
     latest_videos = Video.objects.filter(is_published=True).order_by('-created_at')[:8]
     popular_videos = Video.objects.filter(is_published=True).annotate(
@@ -153,19 +156,29 @@ def video_upload(request):
         if form.is_valid():
             video = form.save(commit=False)
             video.uploader = request.user
-            
-            # Set video type based on duration
-            if video.duration and video.duration <= 60:  # 1 minute or less
+
+            # Set video type based on duration (if your model populates duration)
+            if video.duration and video.duration <= 60:
                 video.video_type = 'short'
-            
+
+            # Save first so it gets a PK and the file is stored in Azure
             video.save()
+
+            # Generate & save the thumbnail to Azure
+            try:
+                generate_thumbnail_for(video)
+            except Exception as e:
+                # Don't block the upload if ffmpeg fails — just log a warning
+                import logging
+                logging.getLogger(__name__).warning("Thumbnail generation failed for %s: %s", video.slug, e)
+
             messages.success(request, 'Video uploaded successfully!')
             return redirect('content:video_detail', slug=video.slug)
-
     else:
         form = VideoUploadForm()
     
     return render(request, 'content/video_upload.html', {'form': form})
+
 
 @login_required
 @require_POST
